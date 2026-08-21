@@ -23,7 +23,7 @@
 
 function login(){
 
-    fetch("http://localhost:3000/login", {
+    fetch("/login", {
 
         method: "POST",
 
@@ -40,7 +40,7 @@ function login(){
 
     })
 
-    .then(res => {
+    .then(r => r.json() ) {
 
         if(!res.ok){
             throw new Error("Login inválido");
