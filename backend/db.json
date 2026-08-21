@@ -1,0 +1,163 @@
+{
+  "usuarios": [
+    {
+      "usuario": "triagem",
+      "senha": "123",
+      "tipo": "triagem"
+    },
+    {
+      "usuario": "medico",
+      "senha": "123",
+      "tipo": "medico"
+    },
+    {
+      "usuario": "atendimento",
+      "senha": "123",
+      "tipo": "atendimento"
+    },
+    {
+      "usuario": "alta",
+      "senha": "123",
+      "tipo": "alta"
+    }
+  ],
+  "pacientes": [],
+  "triagens": [
+    {
+      "id": 1778845453689,
+      "nome": "",
+      "idade": "",
+      "temperatura": "",
+      "sintomas": "",
+      "alergia": "",
+      "risco": "verde",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-15T11:44:13.689Z"
+    },
+    {
+      "id": 1778845466186,
+      "nome": "dadadad",
+      "idade": "23",
+      "temperatura": "34",
+      "sintomas": "Febre",
+      "alergia": "",
+      "risco": "amarelo",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-15T11:44:26.186Z"
+    },
+    {
+      "id": 1779119659907,
+      "nome": "joao",
+      "idade": "25",
+      "temperatura": "36",
+      "sintomas": "Dor de cabeça",
+      "alergia": "diprona",
+      "risco": "amarelo",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-18T15:54:19.907Z"
+    },
+    {
+      "id": 1779119872619,
+      "nome": "joao",
+      "idade": "18",
+      "temperatura": "37",
+      "sintomas": "Dor de cabeça",
+      "alergia": "sim",
+      "risco": "amarelo",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-18T15:57:52.619Z"
+    },
+    {
+      "id": 1779120084202,
+      "nome": "dadadadad",
+      "idade": "24",
+      "temperatura": "36",
+      "sintomas": "Dor de cabeça",
+      "alergia": "mulher",
+      "risco": "amarelo",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-18T16:01:24.202Z"
+    },
+    {
+      "id": 1779120255419,
+      "nome": "mauricio",
+      "idade": "16",
+      "temperatura": "35",
+      "sintomas": "Falta de ar",
+      "alergia": "mulher",
+      "risco": "vermelho",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-18T16:04:15.419Z"
+    },
+    {
+      "id": 1779120446014,
+      "nome": "dadada",
+      "idade": "",
+      "temperatura": "",
+      "sintomas": "",
+      "alergia": "",
+      "risco": "verde",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-18T16:07:26.014Z"
+    },
+    {
+      "id": 1779198727745,
+      "nome": "",
+      "idade": "",
+      "temperatura": "",
+      "sintomas": "",
+      "alergia": "",
+      "risco": "verde",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-05-19T13:52:07.745Z"
+    },
+    {
+      "id": 1787062046848,
+      "nome": "damasceno",
+      "idade": "23",
+      "temperatura": "33.9",
+      "sintomas": "Dor no corpo",
+      "alergia": "neymar",
+      "risco": "verde",
+      "status": "aguardando_medico",
+      "criadoEm": "2026-08-18T14:07:26.848Z"
+    }
+  ],
+  "consultas": [
+    {
+      "id": 1779118844066,
+      "paciente": "",
+      "diagnostico": "",
+      "medicacao": "",
+      "obs": "",
+      "createdAt": "2026-05-18T15:40:44.066Z"
+    },
+    {
+      "id": 1779119348939,
+      "paciente": "",
+      "diagnostico": "",
+      "medicacao": "",
+      "obs": "",
+      "createdAt": "2026-05-18T15:49:08.939Z"
+    },
+    {
+      "id": 1779200850486,
+      "paciente": "mauricio",
+      "diagnostico": "gay",
+      "medicacao": "macho",
+      "obs": "sim",
+      "sintomas": "",
+      "createdAt": "2026-05-19T14:27:30.486Z"
+    },
+    {
+      "id": 1779200919599,
+      "paciente": "joao",
+      "diagnostico": "sla",
+      "medicacao": "dadada",
+      "obs": "da",
+      "sintomas": "",
+      "createdAt": "2026-05-19T14:28:39.599Z"
+    }
+  ],
+  "altas": []
+}

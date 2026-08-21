@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel Médico</title>
+
+<link rel="stylesheet" href="./style.css/medico.css">
+
+<style>
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th{
+    background:#2563eb;
+    color:white;
+    padding:10px;
+}
+
+td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+tr:nth-child(even){
+    background:#f3f4f6;
+}
+
+.verde{
+    color:green;
+    font-weight:bold;
+}
+
+.amarelo{
+    color:orange;
+    font-weight:bold;
+}
+
+.vermelho{
+    color:red;
+    font-weight:bold;
+}
+
+button{
+    padding:8px 12px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🩺 Painel Médico</h2>
+
+<table border="1" width="100%" id="tabelaTriagens">
+
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Idade</th>
+            <th>Temperatura</th>
+            <th>Sintomas</th>
+            <th>Alergia</th>
+            <th>Risco</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+
+    <tbody id="triagens"></tbody>
+
+</table>
+
+<hr>
+
+<h3>Consulta</h3>
+
+<input id="paciente" placeholder="Paciente">
+
+<input id="diagnostico" placeholder="Diagnóstico">
+
+<input id="medicacao" placeholder="Medicação">
+
+<input id="obs" placeholder="Observações">
+
+<br><br>
+
+<button onclick="salvar()">Salvar</button>
+
+<button onclick="gerarAlta()">
+    Gerar Alta
+</button>
+
+</div>
+
+<script>
+
+function carregar() {
+
+    fetch("http://localhost:3000/triagens")
+
+    .then(r => r.json())
+
+    .then(data => {
+
+        const tbody =
+            document.getElementById("triagens");
+
+        tbody.innerHTML = "";
+
+        data.forEach(t => {
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>${t.nome}</td>
+
+                    <td>${t.idade}</td>
+
+                    <td>${t.temperatura}</td>
+
+                    <td>${t.sintomas}</td>
+
+                    <td>${t.alergia || "Nenhuma"}</td>
+
+                    <td>
+                        <span class="${t.risco}">
+                            ${t.risco}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <button
+                        onclick='selecionar("${t.nome}", "${t.alergia}")'>
+                            Atender
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+        });
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("Erro ao carregar triagens");
+
+    });
+
+}
+
+function selecionar(nome, alergia, sintomas) {
+
+    document.getElementById("paciente").value = nome;
+
+    window.sintomasPaciente = sintomas;
+
+    if (alergia && alergia !== "nenhuma") {
+
+        alert("⚠️ ALERTA: paciente possui alergia!");
+
+    }
+
+}
+
+function salvar() {
+
+    fetch("http://localhost:3000/consulta", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            paciente:
+                document.getElementById("paciente").value,
+
+            diagnostico:
+                document.getElementById("diagnostico").value,
+
+            medicacao:
+                document.getElementById("medicacao").value,
+
+            obs:
+                document.getElementById("obs").value,
+
+            sintomas:
+                window.sintomasPaciente || ""
+
+        })
+
+    })
+
+    .then(r => r.json())
+
+    .then(() => {
+
+        alert("Consulta salva!");
+
+    });
+
+}
+function gerarAlta() {
+
+    window.location.href = "alta.html";
+
+}
+
+carregar();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triagem</title>
+
+<style>
+ .btn-tv{
+background: #16a34a;
+color: #ccc;
+border: none;
+padding: 8px 14px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 14px;
+margin-left: 8px;
+ }
+.btn-tv:hover {background: black;}
+
+.pacientes-fila{
+margin-bottom: 30px;
+background: #ccc;
+border-radius: 8px;
+padding: 16px;
+border: 1px solid;
+}
+.pacientes-fila h3{
+margin-top: 0;
+color: black;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.pacientes-fila h3 span{
+font-size: 13px;
+font-weight: normal;
+color: thistle;
+}
+.fila-item{
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: white;
+border-radius: 6px;
+padding: 10px 14px;
+margin-bottom: 8px;
+border: 1px solid white;
+}
+.fila-item strong {font-size: 15px;}
+.fila-item small {color: #ccc; font-size: 12px;}
+.btn-abrir-tv{
+display: inline-block;
+background: cadetblue;
+color: white;
+padding: 8px 14px;
+border-radius: 5px;
+font-size: 14px;
+text-decoration: none;
+cursor: pointer;
+border: none;
+}
+.btn-abrir-tv:hover {background: cornflowerblue;}
+
+
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        background:#f3f4f6;
+        display:flex;
+        justify-content:center;
+        padding:30px;
+    }
+
+    .container{
+        background:white;
+        padding:25px;
+        border-radius:12px;
+        width:400px;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    input, select, textarea, button{
+        width:100%;
+        margin-top:10px;
+        padding:10px;
+        border-radius:8px;
+        border:1px solid #ccc;
+        box-sizing:border-box;
+    }
+
+    textarea{
+        resize:none;
+    }
+
+    button{
+        background:#2563eb;
+        color:white;
+        border:none;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    button:hover{
+        background:#1d4ed8;
+    }
+
+    .badge{
+        margin-top:10px;
+        padding:10px;
+        border-radius:8px;
+        color:white;
+        font-weight:bold;
+        text-align:center;
+    }
+
+    .verde{
+        background:#16a34a;
+    }
+
+    .amarelo{
+        background:#f59e0b;
+    }
+
+    .vermelho{
+        background:#dc2626;
+    }
+</style>
+</head>
+
+<body>
+
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0;">🏥 Triagem Hospitalar</h2>
+    <button class="btn-abrir-tv" onclick="window.open('tv.html','_blank')">📺Abrir Tela da TV</button>
+</div>   
+
+<div class="pacientes-fila">
+    <h3>
+    Pacientes Cadastrados no Atendimento
+    <span>Clique em "Chamar na TV" para chamar ao guinche</span>
+ </h3>
+ <div id="fila-pacientes">
+    <p style="color: #ccc; text-align: center;" >Carregando...</p>
+ </div>
+ <button onclick="carregarPacientes()" style="margin-top: 8px;
+ background: wheat; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Atualizar lista</button>
+</div>
+
+<div class="container">
+
+    <h2>Triagem</h2>
+
+    <input type="text" id="nome" placeholder="Nome do paciente">
+
+    <input type="number" id="idade" placeholder="Idade">
+
+    <input type="number" step="0.1" id="temp" placeholder="Temperatura">
+
+    <select id="sintomas" multiple size="6">
+        <option value="Febre">Febre</option>
+        <option value="Tosse">Tosse</option>
+        <option value="Dor de cabeça">Dor de cabeça</option>
+        <option value="Falta de ar">Falta de ar</option>
+        <option value="Dor no corpo">Dor no corpo</option>
+        <option value="Náusea">Náusea</option>
+        <option value="Vômito">Vômito</option>
+        <option value="Diarreia">Diarreia</option>
+    </select>
+
+    <textarea id="alergia" placeholder="Alergias"></textarea>
+
+    <select id="risco">
+        <option value="verde">Verde</option>
+        <option value="amarelo">Amarelo</option>
+        <option value="vermelho">Vermelho</option>
+    </select>
+
+    <div id="resultado"></div>
+
+    <button onclick="salvar()">Salvar Triagem</button>
+
+</div>
+<script>
+
+function classificarRisco() {
+
+    const temperatura =
+        Number(document.getElementById("temp").value);
+
+    const sintomasSelect =
+        document.getElementById("sintomas");
+
+    const sintomasSelecionados =
+        [...sintomasSelect.options]
+        .filter(op => op.selected)
+        .map(op => op.value);
+
+    let risco = "verde";
+
+    if (
+        temperatura >= 38 ||
+        sintomasSelecionados.includes("Febre") ||
+        sintomasSelecionados.includes("Dor de cabeça")
+    ) {
+        risco = "amarelo";
+    }
+
+    if (
+        temperatura >= 39 ||
+        sintomasSelecionados.includes("Falta de ar")
+    ) {
+        risco = "vermelho";
+    }
+
+    document.getElementById("risco").value = risco;
+
+    mostrarResultado(risco);
+}
+
+function mostrarResultado(risco){
+
+    const resultado =
+        document.getElementById("resultado");
+
+    resultado.innerHTML = "";
+
+    const div = document.createElement("div");
+
+    div.classList.add("badge");
+    div.classList.add(risco);
+
+    if(risco === "verde") div.innerHTML = "🟢 Baixo risco";
+    if(risco === "amarelo") div.innerHTML = "🟡 Atenção";
+    if(risco === "vermelho") div.innerHTML = "🔴 Urgente";
+
+    resultado.appendChild(div);
+}
+
+function salvar(){
+
+    const sintomasSelect =
+        document.getElementById("sintomas");
+
+    const sintomasSelecionados =
+        [...sintomasSelect.options]
+        .filter(op => op.selected)
+        .map(op => op.value);
+
+    const dados = {
+
+        nome: document.getElementById("nome").value,
+        idade: document.getElementById("idade").value,
+        temperatura: document.getElementById("temp").value,
+        sintomas: sintomasSelecionados.join(", "),
+        alergia: document.getElementById("alergia").value,
+        risco: document.getElementById("risco").value
+    };
+
+    fetch("http://localhost:3000/triagem", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+    })
+    .then(r => r.json())
+    .then(() => {
+        alert("Triagem salva com sucesso!");
+    })
+    .catch(() => {
+        alert("Erro ao salvar triagem");
+    });
+}
+
+document.getElementById("temp")
+    .addEventListener("input", classificarRisco);
+
+document.getElementById("sintomas")
+    .addEventListener("change", classificarRisco);
+
+</script>
+</body>
+</html>

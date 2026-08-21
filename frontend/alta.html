@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="/frontend/style.css/alta.css">
+<title>Alta Hospitalar</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    padding:30px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:white;
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 0 15px rgba(0,0,0,0.08);
+}
+
+h1{
+    color:#0b5394;
+    margin-bottom:20px;
+}
+
+.linha{
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.campo{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#333;
+}
+
+input,
+textarea,
+select{
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+button{
+    background:#0b5394;
+    color:white;
+    border:none;
+    padding:14px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    margin-right:10px;
+}
+
+button:hover{
+    background:#073763;
+}
+
+.documento{
+    margin-top:40px;
+    border:2px solid #ddd;
+    padding:30px;
+    border-radius:10px;
+    background:#fafafa;
+}
+
+.documento h2{
+    text-align:center;
+    margin-bottom:30px;
+    color:#0b5394;
+}
+
+.info{
+    margin-bottom:15px;
+}
+
+.assinatura{
+    margin-top:60px;
+    text-align:center;
+}
+
+.assinatura div{
+    margin-top:60px;
+    border-top:1px solid #000;
+    width:300px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-top:10px;
+}
+
+@media print {
+
+    body{
+        background:white;
+    }
+
+    button{
+        display:none;
+    }
+
+    .container{
+        box-shadow:none;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Alta Hospitalar</h1>
+
+    <div class="linha">
+
+        <div class="campo">
+
+            <label>Selecionar Paciente</label>
+
+            <select id="pacienteSelect">
+                <option value="">Carregando...</option>
+            </select>
+
+        </div>
+
+        <div class="campo">
+
+            <label>Data da Alta</label>
+
+            <input type="date" id="dataAlta"/>
+
+        </div>
+
+    </div>
+
+    <div class="linha">
+
+        <div class="campo">
+
+            <label>Médico Responsável</label>
+
+            <input type="text" id="medico"/>
+
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+        <label>Orientações Médicas</label>
+
+        <textarea id="orientacoes">
+Repouso por 3 dias.
+Manter hidratação.
+Retornar em caso de piora.
+Uso correto das medicações prescritas.
+        </textarea>
+
+    </div>
+
+    <br>
+
+    <div class="botoes">
+    <button onclick="gerarAlta()">
+        Gerar Alta
+    </button>
+
+    <button onclick="imprimirAlta()">
+        🖨️ Imprimir
+    </button>
+</div>
+    
+    <div class="documento" id="documento">
+
+        <h2>DOCUMENTO DE ALTA HOSPITALAR</h2>
+
+        <div class="info">
+            <strong>Paciente:</strong>
+            <span id="docNome">-</span>
+        </div>
+
+        <div class="info">
+            <strong>Observações:</strong>
+            <span id="docSintomas">-</span>
+        </div>
+
+        <div class="info">
+            <strong>Medicação:</strong>
+            <span id="docMedicacao">-</span>
+        </div>
+
+        <div class="info">
+            <strong>Diagnóstico:</strong>
+            <span id="docDiagnostico">-</span>
+        </div>
+
+        <div class="info">
+            <strong>Data da Alta:</strong>
+            <span id="docData">-</span>
+        </div>
+
+        <div class="info">
+
+            <strong>Orientações:</strong>
+
+            <p id="docOrientacoes"></p>
+
+        </div>
+
+        <div class="assinatura">
+
+            <div>
+
+                <span id="docMedico">
+                    Médico Responsável
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API = "http://localhost:3000";
+
+let consultas = [];
+
+// =========================
+// CARREGAR PACIENTES
+// =========================
+
+async function carregarPacientes() {
+
+    try {
+
+        const resposta =
+            await fetch(`${API}/medicacoes`);
+
+        consultas = await resposta.json();
+
+        const select =
+            document.getElementById("pacienteSelect");
+
+        // limpa select
+        select.innerHTML =
+            `<option value="">Selecione</option>`;
+
+        // remove nomes duplicados
+        const nomesUnicos = [
+            ...new Set(
+                consultas.map(c => c.paciente)
+            )
+        ];
+
+        // adiciona pacientes
+        nomesUnicos.forEach(nome => {
+
+            select.innerHTML += `
+                <option value="${nome}">
+                    ${nome}
+                </option>
+            `;
+        });
+
+    } catch (erro) {
+
+        console.log(erro);
+
+        alert("Erro ao carregar pacientes");
+
+    }
+
+}
+
+// =========================
+// GERAR ALTA
+// =========================
+
+function gerarAlta() {
+
+    const nomeSelecionado =
+        document.getElementById("pacienteSelect").value;
+
+    if (!nomeSelecionado) {
+
+        alert("Selecione um paciente");
+
+        return;
+    }
+
+    // busca consulta do paciente
+    const consulta = consultas.find(
+        c => c.paciente === nomeSelecionado
+    );
+
+    if (!consulta) {
+
+        alert("Consulta não encontrada");
+
+        return;
+    }
+
+    // pega valores
+    const dataAlta =
+        document.getElementById("dataAlta").value;
+
+    const medico =
+        document.getElementById("medico").value;
+
+    const orientacoes =
+        document.getElementById("orientacoes").value;
+
+    // preenche documento
+    document.getElementById("docNome").innerText =
+        consulta.paciente || "-";
+
+    document.getElementById("docSintomas").innerText =
+        consulta.sintomas || "-";
+
+    document.getElementById("docMedicacao").innerText =
+        consulta.medicacao || "-";
+
+    document.getElementById("docDiagnostico").innerText =
+        consulta.diagnostico || "-";
+
+    document.getElementById("docData").innerText =
+        dataAlta || "-";
+
+    document.getElementById("docOrientacoes").innerText =
+        orientacoes || "-";
+
+    document.getElementById("docMedico").innerText =
+        medico || "Médico Responsável";
+
+    alert("Alta gerada com sucesso!");
+
+}
+
+// =========================
+// INICIAR
+// =========================
+
+carregarPacientes();
+
+function imprimirAlta() {
+
+    const paciente =
+        document.getElementById("docNome").innerText;
+
+    if (paciente === "-") {
+        alert("Gere a alta antes de imprimir.");
+        return;
+    }
+
+    window.print();
+
+}
+</script>
+
+</body>
+</html>

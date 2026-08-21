@@ -1,0 +1,115 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:linear-gradient(135deg,#000,#1a1a1a,#000);
+}
+
+.container{
+    width:400px;
+    padding:180px 35px 35px;
+    background:#111;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.7);
+
+    /* Logo */
+
+    background-repeat:no-repeat;
+    background-position:center 20px;
+    background-size:180px;
+}
+
+.container h2{
+    color:#f5f1e8;
+    margin-bottom:25px;
+    font-size:28px;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+    transition:.3s;
+}
+
+input::placeholder{
+    color:#bdbdbd;
+}
+
+input:focus,
+select:focus{
+    background:#2d2d2d;
+    box-shadow:0 0 8px rgba(255,255,255,.25);
+}
+
+select{
+    cursor:pointer;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 15px center;
+    background-size:18px;
+}
+
+input[type="file"]{
+    background:#1b1b1b;
+    color:#bdbdbd;
+    padding:10px;
+    cursor:pointer;
+}
+
+input[type="file"]::file-selector-button{
+    background:#f5f1e8;
+    color:#111;
+    border:none;
+    border-radius:8px;
+    padding:8px 14px;
+    margin-right:12px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.3s;
+}
+
+input[type="file"]::file-selector-button:hover{
+    background:#d9d2be;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:#f5f1e8;
+    color:#111;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#d9d2be;
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(255,255,255,.2);
+}
+
+button:active{
+    transform:scale(.98);
+}
