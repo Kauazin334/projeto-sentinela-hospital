@@ -1,88 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
 
-    <link rel="stylesheet" href="/frontend/style.css/index.css">
+    <title>Login - Hospital Pro</title>
+
+    <link rel="stylesheet" href="/style.css/index.css">
 </head>
 
 <body>
 
-<div class="container">
-    <h2>Hospital Pro</h2>
+    <div class="container">
 
-    <input id="usuario" placeholder="Usuário">
-    <input id="senha" type="password" placeholder="Senha">
+        <h2>Hospital Pro</h2>
 
-    <button onclick="login()">Entrar</button>
-</div>
+        <input
+            id="usuario"
+            type="text"
+            placeholder="Usuário"
+            autocomplete="username"
+        >
 
-<script>
+        <input
+            id="senha"
+            type="password"
+            placeholder="Senha"
+            autocomplete="current-password"
+        >
 
-function login(){
+        <button onclick="login()">
+            Entrar
+        </button>
 
-    fetch("/login", {
+    </div>
 
-        method: "POST",
+    <script>
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+        function login() {
 
-        body: JSON.stringify({
+            const usuario = document.getElementById("usuario").value.trim();
+            const senha = document.getElementById("senha").value;
 
-            usuario: document.getElementById("usuario").value,
-            senha: document.getElementById("senha").value
+            if (!usuario || !senha) {
+                alert("Digite o usuário e a senha.");
+                return;
+            }
 
-        })
+            fetch("/login", {
 
-    })
+                method: "POST",
 
-    .then(r => r.json() ) {
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        if(!res.ok){
-            throw new Error("Login inválido");
+                body: JSON.stringify({
+                    usuario: usuario,
+                    senha: senha
+                })
+
+            })
+
+            .then(res => {
+
+                if (!res.ok) {
+                    return res.json()
+                        .then(data => {
+                            throw new Error(data.erro || "Login inválido");
+                        });
+                }
+
+                return res.json();
+
+            })
+
+            .then(data => {
+
+                console.log("Login realizado:", data);
+
+                if (data.tipo === "triagem") {
+
+                    window.location.href = "/triagem.html";
+
+                }
+
+                else if (data.tipo === "medico") {
+
+                    window.location.href = "/medico.html";
+
+                }
+
+                else if (data.tipo === "atendimento") {
+
+                    window.location.href = "/atendimento.html";
+
+                }
+
+                else if (data.tipo === "alta") {
+
+                    window.location.href = "/alta.html";
+
+                }
+
+                else {
+
+                    alert("Tipo de usuário inválido.");
+
+                }
+
+            })
+
+            .catch(err => {
+
+                console.error("Erro no login:", err);
+
+                alert(err.message || "Erro ao realizar login.");
+
+            });
+
         }
 
-        return res.json();
+        // Permite apertar ENTER para fazer login
+        document.getElementById("senha").addEventListener("keydown", function(event) {
 
-    })
+            if (event.key === "Enter") {
+                login();
+            }
 
-    .then(data => {
+        });
 
-        if(data.tipo === "triagem"){
-            location.href = "triagem.html";
-        }
-
-        else if(data.tipo === "medico"){
-            location.href = "medico.html";
-        }
-
-        else if(data.tipo === "atendimento"){
-            location.href = "atendimento.html";
-        }
-
-        else if(data.tipo === "alta"){
-            location.href = "alta.html";
-        }
-
-        else{
-            alert("Tipo de usuário inválido.");
-        }
-
-    })
-
-    .catch(err => {
-
-        alert(err.message);
-
-    });
-
-}
-
-</script>
+    </script>
 
 </body>
 </html>
+
